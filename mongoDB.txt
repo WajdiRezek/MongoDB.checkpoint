@@ -1,0 +1,163 @@
+test> show dbs
+admin    40.00 KiB
+config  108.00 KiB
+local    72.00 KiB
+test> use contact
+switched to db contact
+contact> show dbs
+admin    40.00 KiB
+config  108.00 KiB
+local    72.00 KiB
+contact> db.createCollection('contactlist')
+{ ok: 1 }
+contact> show dbs
+admin     40.00 KiB
+config   108.00 KiB
+contact    8.00 KiB
+local     72.00 KiB
+contact> db.insertMany([{lastname : Ben , firstname : Moris , Email : ben@gmail.com , age : 26},{lastname : Kefi , firstname : Seif , Email : kefi@gmail.com , age : 15},{lastnamle : Emilie , firstname : brouge , Email : emilie.b@gmail.com , age : 40},{lastname : Alex , firstname : brown , age : 4},{lastnale : Danzel , firstname : Washington , age : 3}])
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:64)
+
+> 1 | db.insertMany([{lastname : Ben , firstname : Moris , Email : ben@gmail.com , age : 26},{lastname : Kefi , firstname : Seif , Email : kefi@gmail.com , age : 15},{lastnamle : Emilie , firstname : brouge , Email : emilie.b@gmail.com , age : 40},{lastname : Alex , firstname : brown , age : 4},{lastnale : Danzel , firstname : Washington , age : 3}])
+    |                                                                 ^
+  2 |
+
+contact> db.contactlist.find()
+
+contact> db.contact.find()
+contact> db.insertMany([{lastname : "Ben" , firstname : "Moris" , Email : "ben@gmail.com" , age : 26},{lastname : "Kefi" , firstname : "Seif" , Email : "kefi@gmail.com" , age : 15},{lastnamle : "Emilie" , firstname : "brouge" , Email : "emilie.b@gmail.com" , age : 40},{lastname : "Alex" , firstname : "brown" , age : 4},{lastname : "Danzel" , firstname : "Washington" , age : 3}])
+TypeError: db.insertMany is not a function
+contact> db.contactlist.insertMany([{lastname : "Ben" , firstname : "Moris" , Email : "ben@gmail.com" , age : 26},{lastname : "Kefi" , firstname : "Seif" , Email : "kefi@gmail.com" , age : 15},{lastnamle : "Emilie" , firstname : "brouge" , Email : "emilie.b@gmail.com" , age : 40},{lastname : "Alex" , firstname : "brown" , age : 4},{lastname : "Danzel" , firstname : "Washington" , age : 3}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6740656162eb34814d0d8190'),
+    '1': ObjectId('6740656162eb34814d0d8191'),
+    '2': ObjectId('6740656162eb34814d0d8192'),
+    '3': ObjectId('6740656162eb34814d0d8193'),
+    '4': ObjectId('6740656162eb34814d0d8194')
+  }
+}
+contact> db.contactlist.find()
+[
+  {
+    _id: ObjectId('6740656162eb34814d0d8190'),
+    lastname: 'Ben',
+    firstname: 'Moris',
+    Email: 'ben@gmail.com',
+    age: 26
+  },
+  {
+    _id: ObjectId('6740656162eb34814d0d8191'),
+    lastname: 'Kefi',
+    firstname: 'Seif',
+    Email: 'kefi@gmail.com',
+    age: 15
+  },
+  {
+    _id: ObjectId('6740656162eb34814d0d8192'),
+    lastnamle: 'Emilie',
+    firstname: 'brouge',
+    Email: 'emilie.b@gmail.com',
+    age: 40
+  },
+  {
+    _id: ObjectId('6740656162eb34814d0d8193'),
+    lastname: 'Alex',
+    firstname: 'brown',
+    age: 4
+  },
+  {
+    _id: ObjectId('6740656162eb34814d0d8194'),
+    lastname: 'Danzel',
+    firstname: 'Washington',
+    age: 3
+  }
+]
+contact> db.contactlist.find({age : {$gt : 18}})
+[
+  {
+    _id: ObjectId('6740656162eb34814d0d8190'),
+    lastname: 'Ben',
+    firstname: 'Moris',
+    Email: 'ben@gmail.com',
+    age: 26
+  },
+  {
+    _id: ObjectId('6740656162eb34814d0d8192'),
+    lastnamle: 'Emilie',
+    firstname: 'brouge',
+    Email: 'emilie.b@gmail.com',
+    age: 40
+  }
+]
+contact> db.cantactlist.find({age : {$gt : 18}},{lastname : {$regex : "li"}})
+MongoServerError[Location31325]: Unknown expression $regex
+contact> db.cantactlist.find({age : {$gt : 18}},{lastname : {$regex : "li" , $options : "i"}})
+MongoServerError[Location16410]: FieldPath field names may not start with '$'. Consider using $getField or $setField.
+contact> db.cantactlist.find({age : {$gt : 18}},{lastname : {$getField : "li"}})
+
+contact> db.cantactlist.find({age : {$gt : 18}},{lastname : {$regex : "li"}})
+MongoServerError[Location31325]: Unknown expression $regex
+contact> db.cantactlist.find({age : {$gt : 18} , {lastname : /li/}})
+Uncaught:
+SyntaxError: Unexpected token (1:40)
+
+> 1 | db.cantactlist.find({age : {$gt : 18} , {lastname : /li/}})
+    |                                         ^
+  2 |
+
+contact> db.cantactlist.find({age : {$gt : 18} , lastname : /li/})
+
+contact> db.cantactlist.find({age : {$gt : 18} , lastnamle : /li/})
+
+contact> db.cantactlist.find({age : {$gt : 18} , lastnamle : /li/})
+
+contact> db.contactlist.find({age : {$gt : 18} , lastnamle : /li/})
+[
+  {
+    _id: ObjectId('6740656162eb34814d0d8192'),
+    lastnamle: 'Emilie',
+    firstname: 'brouge',
+    Email: 'emilie.b@gmail.com',
+    age: 40
+  }
+]
+contact> db.contactlist.updateOne({_id : ObjectId('6740656162eb34814d0d8191')} , {$set : {firstname : Anis}})
+ReferenceError: Anis is not defined
+contact> db.contactlist.updateOne({_id : ObjectId('6740656162eb34814d0d8191')} , {$set : {firstname : "Anis"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+contact> db.contactlist.deleteMany({age : {$lt : 5}})
+{ acknowledged: true, deletedCount: 2 }
+contact> db.contactlist.find()
+[
+  {
+    _id: ObjectId('6740656162eb34814d0d8190'),
+    lastname: 'Ben',
+    firstname: 'Moris',
+    Email: 'ben@gmail.com',
+    age: 26
+  },
+  {
+    _id: ObjectId('6740656162eb34814d0d8191'),
+    lastname: 'Kefi',
+    firstname: 'Anis',
+    Email: 'kefi@gmail.com',
+    age: 15
+  },
+  {
+    _id: ObjectId('6740656162eb34814d0d8192'),
+    lastnamle: 'Emilie',
+    firstname: 'brouge',
+    Email: 'emilie.b@gmail.com',
+    age: 40
+  }
+]
+contact>
